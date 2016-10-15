@@ -9,13 +9,13 @@ describe('arena', () => {
     });
 
     it('should be show player1 as winner if the score is 2-0', () => {
-        arena.setScore('2-0');
-        expect(arena.winner()).to.be('player1');
+        arena.setScore({player1: 2, player2: 0});
+        expect(arena.getWinner()).to.equal('player1');
     });
 
     it('should be show player1 as winner if the score is 2-1', () => {
-        arena.setScore('2-1');
-        expect(arena.winner()).to.be('player1');
+        arena.setScore({player1: 2, player2: 1});
+        expect(arena.getWinner()).to.equal('player1');
     });
 
 });
