@@ -63,14 +63,14 @@ describe('game play', () => {
         players.player1 = 'rock';
         players.player2 = 'rock';
         let outcome = gamePlay(players);
-        expect(outcome).to.equal('rock');
+        expect(outcome).to.equal('draw');
     });
 
     it('player1 should draw with scissors if player2 has scissors ', () => {
         players.player1 = 'scissors';
         players.player2 = 'scissors';
         let outcome = gamePlay(players);
-        expect(outcome).to.equal('scissors');
+        expect(outcome).to.equal('draw');
     });
 
 
