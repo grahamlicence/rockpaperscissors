@@ -13,6 +13,10 @@ function computer () {
     this.getChoice = function() {
         return this.choice;
     }
+
+    this.reset = function() {
+        this.choice = null;
+    }
 }
 
 export default computer;
