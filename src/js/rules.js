@@ -1,11 +1,11 @@
 const rules = {
-    paper: {
-        rock: true,
-        scissors: false
-    },
     rock: {
         paper: false,
         scissors: true
+    },
+    paper: {
+        rock: true,
+        scissors: false
     },
     scissors: {
         rock: false,

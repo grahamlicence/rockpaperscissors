@@ -1,5 +1,5 @@
 require('../css/main.scss');
 
-import print from './module';
+import arena from './arena';
 
-print('it works well!');
+arena.init();
