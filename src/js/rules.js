@@ -4,12 +4,12 @@ const rules = {
         scissors: false
     },
     rock: {
-        paper: true,
-        scissors: false
+        paper: false,
+        scissors: true
     },
     scissors: {
-        rock: true,
-        paper: false
+        rock: false,
+        paper: true
     }
 }
 
