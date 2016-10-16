@@ -4,9 +4,8 @@ import gamePlay from './gamePlay';
  * Handles match and game scores
  */
 const match = {
-    score: {player1: 0, player2: 0},
-
     round: 1,
+    score: {player1: 0, player2: 0},
 
     play: function(options) {
         const outcome = gamePlay(options);
@@ -32,8 +31,8 @@ const match = {
     },
 
     reset: function() {
-        this.score = {player1: 0, player2: 0};
         this.round = 1;
+        this.score = {player1: 0, player2: 0};
     }
 }
 

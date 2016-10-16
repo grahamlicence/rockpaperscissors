@@ -3,11 +3,12 @@ import computer from './computer';
 import match from './match';
 
 const arena = {
+    gameType: 'pvc',
+    lastMatch: null,
+    moves: [],
     player1: null,
     player2: null,
     winner: null,
-    lastMatch: null,
-    gameType: 'pvc',
 
     setPlayers: function(players) {
         this.player1 = players.player1;
@@ -41,13 +42,18 @@ const arena = {
 
     changePlayers: function(e) {
         const {type} = e.target.dataset;
-        if (type === 'pvc') {
-            this.setPlayerVsComputer();
-        }
-        if (type === 'cvc') {
-            this.setComputerVsComputer();
-        }
         this.gameType = type;
+        switch(type) {
+            case 'pvp':
+                this.setPlayerVsPlayer();
+                break;
+            case 'pvc':
+                this.setPlayerVsComputer();
+                break;
+            case 'cvc':
+                this.setComputerVsComputer();
+                break;
+        }
     },
 
     simulateMove: function() {
@@ -76,39 +82,52 @@ const arena = {
         this.score = score;
     },
 
-    getWinner: function() {
-        return this.winner;
-    },
-
-    updatePlay: function() {
+    /**
+     * Displays game score, moves and winner
+     */
+    updateScoreBoard: function() {
         this.setScore(match.getScore());
 
-        const {score, lastMatch} = this,
-            round = match.getRound(),
-            winner = this.getWinner();
-        let result = 'Begin game!';
-        
-        if (lastMatch) {
-            result = lastMatch === 'draw' ? lastMatch : `${lastMatch} wins round`;
-        }
+        const {score, moves, winner} = this,
+            round = match.getRound();
+        let result = 'Begin game!',
+            previousMoves = '';
 
         this.html.status.score.innerHTML = `${score.player1}-${score.player2}`;
         this.html.status.round.innerHTML = `Round ${round}`;
 
         if (winner) {
-            this.html.status.winner.innerHTML = `${winner} wins game!`;
-            return;
+            result = `${winner} wins game!`;
+        } else if (moves.length) {
+            result = moves[moves.length - 1].result;
+        }
+        
+        if (moves.length) {
+            for (let i = moves.length - 1; i > -1; i--) {
+                previousMoves += `<p><span>${moves[i].move}</span> <span>${moves[i].result}</p>`;
+            }
         }
         
         this.html.status.winner.innerHTML = result;
-
+        this.html.status.moves.innerHTML = previousMoves;
     },
 
     /**
-     * When both players chosen, play game
+     * Used to save each game move
+     */
+    storeMoveOutcome: function(options) {
+        const {lastMatch} = this,
+            move = `${options.player1} - ${options.player2}`,
+            result = lastMatch === 'draw' ? lastMatch : `${lastMatch} wins round`;
+        
+        this.moves.push({move, result});
+    },
+
+    /**
+     * When both players chosen, play game round
      */
     checkSelections: function() {
-        // get computer's selection
+        // get computer's selection on player vs computer
         if (this.gameType === 'pvc') {
             this.player2.choose();
         }
@@ -116,8 +135,10 @@ const arena = {
                 player1: this.player1.getChoice(),
                 player2: this.player2.getChoice()
             };
+
         if (playerOptions.player1 && playerOptions.player2) {
             this.lastMatch = match.play(playerOptions);
+            this.storeMoveOutcome(playerOptions)
             this.endRound();
         }
     },
@@ -141,7 +162,7 @@ const arena = {
             player2[i].checked = false;
         }
 
-        this.updatePlay();
+        this.updateScoreBoard();
     },
 
     /**
@@ -153,12 +174,16 @@ const arena = {
         match.reset();
         this.winner = null;
         this.lastMatch = null;
-        this.updatePlay();
+        this.moves = [];
+        this.updateScoreBoard();
     },
     
+    /**
+     * Adds listeners to play game
+     */
     start: function() {
         const {player1, player2, restart, type} = this.html;
-        this.updatePlay();
+        this.updateScoreBoard();
 
         // allow for any number of options
         for (let i = 0; i < player1.length; i++) {
