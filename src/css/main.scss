@@ -5,3 +5,43 @@ body {
 		color: white;
 	}
 }
+
+.game {
+    &__button {
+        border: solid 2px grey;
+
+        &--1 {
+            .game--type1 & {
+                border-color: yellow;
+            }
+        }
+
+        &--2 {
+            .game--type2 & {
+                border-color: yellow;
+            }
+        }
+
+        &--3 {
+            .game--type3 & {
+                border-color: yellow;
+            }
+        }
+    }
+
+}
+
+.player1 {
+    .game--won &,
+    .game--type3 & {
+        display: none;
+    }
+}
+
+.player2 {
+    .game--won &,
+    .game--type2 &,
+    .game--type3 & {
+        display: none;
+    }
+}

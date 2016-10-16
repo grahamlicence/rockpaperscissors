@@ -46,12 +46,15 @@ const arena = {
         switch(type) {
             case 'pvp':
                 this.setPlayerVsPlayer();
+                this.html.game.className = 'game game--type1';
                 break;
             case 'pvc':
                 this.setPlayerVsComputer();
+                this.html.game.className = 'game game--type2';
                 break;
             case 'cvc':
                 this.setComputerVsComputer();
+                this.html.game.className = 'game game--type3';
                 break;
         }
     },
@@ -98,6 +101,7 @@ const arena = {
 
         if (winner) {
             result = `${winner} wins game!`;
+            this.html.game.className += ' game--won';
         } else if (moves.length) {
             result = moves[moves.length - 1].result;
         }
@@ -176,6 +180,7 @@ const arena = {
         this.lastMatch = null;
         this.moves = [];
         this.updateScoreBoard();
+        this.html.game.className = this.html.game.className.replace(' game--won', '');
     },
     
     /**
@@ -198,7 +203,6 @@ const arena = {
         this.html = html;
 
         this.setPlayerVsComputer();
-        // this.setPlayerVsPlayer();
         this.start();
     }
 }
