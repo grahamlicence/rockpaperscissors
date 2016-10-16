@@ -172,7 +172,10 @@ const arena = {
     /**
      * Called to clear all stats for current game
      */
-    resetGame: function() {
+    resetGame: function(e) {
+        if (e) {
+            e.preventDefault();
+        }
         this.player1.reset();
         this.player2.reset();
         match.reset();

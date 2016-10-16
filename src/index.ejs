@@ -5,6 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>document.documentElement.className = 'js';</script>
 </head>
 <body>
 	<main class="game game--type2">
@@ -16,7 +17,7 @@
             <button class="game__button game__button--3" data-type="cvc">Computer vs Computer</button>
         </div>
 
-        <div class="game__arena">
+        <form class="game__arena" action="/play-game" method="post">
             <div class="status">
                 <p class="status__score"></p>
                 <p class="status__round"></p>
@@ -28,15 +29,15 @@
                 <div class="player1__options">
                     <label class="option1">
                         Rock
-                        <input type="radio" class="option" name="player1" value="rock" />
+                        <input type="checkbox" class="option" value="rock" />
                     </label>
                     <label class="option2">
                         Paper
-                        <input type="radio" class="option" name="player1" value="paper" />
+                        <input type="checkbox" class="option" value="paper" />
                     </label>
                     <label class="option3">
                         Scissors
-                        <input type="radio" class="option" name="player1" value="scissors" />
+                        <input type="checkbox" class="option" value="scissors" />
                     </label>
                 </div>
             </div>
@@ -46,25 +47,28 @@
                 <div class="player2__options">
                     <label class="option1">
                         Rock
-                        <input type="radio" class="option" name="player2" value="rock" />
+                        <input type="checkbox" class="option" value="rock" />
                     </label>
                     <label class="option2">
                         Paper
-                        <input type="radio" class="option" name="player2" value="paper" />
+                        <input type="checkbox" class="option" value="paper" />
                     </label>
                     <label class="option3">
                         Scissors
-                        <input type="radio" class="option" name="player2" value="scissors" />
+                        <input type="checkbox" class="option" value="scissors" />
                     </label>
                 </div>
             </div>
 
-            <button class="game__restart">Restart game</button>
+            <button class="game__restart" type="submit">Restart game</button>
+
+            <!-- allows for on js play of game, displays error if more than 1 option selected -->
+            <button class="game__submit" type="submit">Play game</button>
 
             <div class="status">
                 <div class="status__moves"></div>
             </div>
-        </div>
+        </form>
     </main>
 </body>
 </html>

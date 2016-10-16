@@ -29,6 +29,12 @@ body {
         }
     }
 
+    &__submit {
+        .js & {
+            display: none;
+        }
+    }
+
 }
 
 .player1 {
