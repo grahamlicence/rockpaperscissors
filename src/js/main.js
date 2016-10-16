@@ -13,7 +13,8 @@ const html = {
         score: document.getElementsByClassName('status__score')[0],
         winner: document.getElementsByClassName('status__winner')[0]
     },
-    type: document.getElementsByClassName('game__type')[0]
+    type: document.getElementsByClassName('game__type')[0],
+    toggle: document.getElementsByClassName('game__toggle')[0]
 };
 
 arena.init(html);

@@ -11,11 +11,14 @@
 	<main class="game game--type2">
         <h1>Rock, Paper, Scissors</h1>
 
-        <div class="game__type">
-            <button class="game__button game__button--1" data-type="pvp">Player vs Player</button>
-            <button class="game__button game__button--2" data-type="pvc">Player vs Computer</button>
-            <button class="game__button game__button--3" data-type="cvc">Computer vs Computer</button>
-        </div>
+        <form class="game__settings" action="/change-game" method="post">
+            <div class="game__type">
+                <button class="game__button game__button--1" data-type="pvp">Player vs Player</button>
+                <button class="game__button game__button--2" data-type="pvc">Player vs Computer</button>
+                <button class="game__button game__button--3" data-type="cvc">Computer vs Computer</button>
+            </div>
+            <p>Use rules: <button class="game__toggle">..Lizard, Spock</button></p>
+        </form>
 
         <form class="game__arena" action="/play-game" method="post">
             <div class="status">
@@ -39,6 +42,16 @@
                         Scissors
                         <input type="checkbox" class="option" value="scissors" />
                     </label>
+                    <div class="lizard-spock">
+                        <label class="option4">
+                            Lizard
+                            <input type="checkbox" class="option" value="lizard" />
+                        </label>
+                        <label class="option5">
+                            Spock
+                            <input type="checkbox" class="option" value="spock" />
+                        </label>
+                    </div>
                 </div>
             </div>
 
@@ -57,6 +70,16 @@
                         Scissors
                         <input type="checkbox" class="option" value="scissors" />
                     </label>
+                    <div class="lizard-spock">
+                        <label class="option4">
+                            Lizard
+                            <input type="checkbox" class="option" value="lizard" />
+                        </label>
+                        <label class="option5">
+                            Spock
+                            <input type="checkbox" class="option" value="spock" />
+                        </label>
+                    </div>
                 </div>
             </div>
 

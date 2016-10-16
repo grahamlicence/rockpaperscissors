@@ -6,6 +6,8 @@ const arena = {
     gameType: 'pvc',
     lastMatch: null,
     moves: [],
+    movesToWin: 2,
+    rulesCount: 3,
     player1: null,
     player2: null,
     winner: null,
@@ -40,28 +42,51 @@ const arena = {
         this.resetGame();
     },
 
+    clearGameTypeClass: function() {
+        this.html.game.className = this.html.game.className
+            .replace(' game--type1', '')
+            .replace(' game--type2', '')
+            .replace(' game--type3', '')
+    },
+
     changePlayers: function(e) {
         const {type} = e.target.dataset;
+
+        e.preventDefault();
         this.gameType = type;
+        this.clearGameTypeClass();
+
         switch(type) {
             case 'pvp':
                 this.setPlayerVsPlayer();
-                this.html.game.className = 'game game--type1';
+                this.html.game.className += ' game--type1';
                 break;
             case 'pvc':
                 this.setPlayerVsComputer();
-                this.html.game.className = 'game game--type2';
+                this.html.game.className += ' game--type2';
                 break;
             case 'cvc':
                 this.setComputerVsComputer();
-                this.html.game.className = 'game game--type3';
+                this.html.game.className += ' game--type3';
                 break;
         }
     },
 
+    toggleGameRules: function(e) {
+        const {rulesCount, html} = this,
+            newClass = rulesCount === 3 ? ' game--lizard-spock' : '',
+            oldClass = rulesCount === 3 ? '' : ' game--lizard-spock';
+        e.preventDefault();
+        this.rulesCount = rulesCount === 3 ? 5 : 3;
+        html.toggle.innerHTML = rulesCount === 3 ? 'Rock, Paper, Scissors' : '..Lizard, Spock';
+        html.game.className = html.game.className.replace(oldClass, '');
+        html.game.className += newClass;
+        this.resetGame();
+    },
+
     simulateMove: function() {
-        this.player1.choose();
-        this.player2.choose();
+        this.player1.choose(this.rulesCount);
+        this.player2.choose(this.rulesCount);
         this.checkSelections();
     },
 
@@ -71,11 +96,11 @@ const arena = {
 
     setScore: function(score) {
         let hasWinner = false;
-        if (score.player1 === 2) {
+        if (score.player1 === this.movesToWin) {
             this.winner = 'player1';
             hasWinner = true;
         }
-        if (score.player2 === 2) {
+        if (score.player2 === this.movesToWin) {
             this.winner = 'player2';
             hasWinner = true;
         }
@@ -133,13 +158,13 @@ const arena = {
     checkSelections: function() {
         // get computer's selection on player vs computer
         if (this.gameType === 'pvc') {
-            this.player2.choose();
+            this.player2.choose(this.rulesCount);
         }
         const playerOptions = {
                 player1: this.player1.getChoice(),
                 player2: this.player2.getChoice()
             };
-
+            
         if (playerOptions.player1 && playerOptions.player2) {
             this.lastMatch = match.play(playerOptions);
             this.storeMoveOutcome(playerOptions)
@@ -176,6 +201,9 @@ const arena = {
         if (e) {
             e.preventDefault();
         }
+        if (this.simulation) {
+            clearInterval(this.simulation);
+        }
         this.player1.reset();
         this.player2.reset();
         match.reset();
@@ -190,7 +218,7 @@ const arena = {
      * Adds listeners to play game
      */
     start: function() {
-        const {player1, player2, restart, type} = this.html;
+        const {player1, player2, restart, type, toggle} = this.html;
         this.updateScoreBoard();
 
         // allow for any number of options
@@ -198,8 +226,9 @@ const arena = {
             player1[i].addEventListener('click', (e) => this.onPlayerSelect(e, {player: 'player1'}));
             player2[i].addEventListener('click', (e) => this.onPlayerSelect(e, {player: 'player2'}));
         }
-        restart.addEventListener('click', this.resetGame.bind(this));
-        type.addEventListener('click', this.changePlayers.bind(this));
+        restart.addEventListener('click', (e) => this.resetGame(e));
+        type.addEventListener('click', (e) => this.changePlayers(e));
+        toggle.addEventListener('click', (e) => this.toggleGameRules(e));
     },
 
     init: function(html) {

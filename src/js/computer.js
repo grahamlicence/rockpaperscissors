@@ -3,9 +3,9 @@ import rules from './rules';
 function computer () {
     this.choice = null,
 
-    this.choose = function() {
+    this.choose = function(limit) {
         const options = Object.keys(rules),
-            selection = Math.floor(Math.random() * options.length);
+            selection = Math.floor(Math.random() * limit);
 
         this.choice = options[selection];
     },
