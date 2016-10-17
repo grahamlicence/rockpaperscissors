@@ -30,7 +30,6 @@ const arena = {
         const players = {player1: new computer(), player2: new computer()}
         this.setPlayers(players);
         this.resetGame();
-        this.startSimulation();
     },
 
     setPlayerVsPlayer: function() {
@@ -122,7 +121,7 @@ const arena = {
             previousMoves = '';
 
         this.html.status.score.innerHTML = `${score.player1}-${score.player2}`;
-        this.html.status.round.innerHTML = `Round ${round}`;
+        this.html.status.round.innerHTML = `Round ${winner ? round - 1 : round}`;
 
         if (winner) {
             result = `${winner} wins game!`;
@@ -133,7 +132,9 @@ const arena = {
         
         if (moves.length) {
             for (let i = moves.length - 1; i > -1; i--) {
-                previousMoves += `<p><span>${moves[i].move}</span> <span>${moves[i].result}</p>`;
+                previousMoves += `<li class="move">
+                    <span class="move__options">${i + 1} ${moves[i].move}</span> 
+                    <span class="move__result">${moves[i].result}</li>`;
             }
         }
         
@@ -164,7 +165,7 @@ const arena = {
                 player1: this.player1.getChoice(),
                 player2: this.player2.getChoice()
             };
-            
+
         if (playerOptions.player1 && playerOptions.player2) {
             this.lastMatch = match.play(playerOptions);
             this.storeMoveOutcome(playerOptions)
@@ -212,6 +213,11 @@ const arena = {
         this.moves = [];
         this.updateScoreBoard();
         this.html.game.className = this.html.game.className.replace(' game--won', '');
+
+        // restart simulation 
+        if (this.gameType === 'cvc') {
+            this.startSimulation();
+        }
     },
     
     /**

@@ -1,12 +1,9 @@
-body {
-	background-color: green;
-
-	h1 {
-		color: white;
-	}
+* {
+    box-sizing: border-box;
 }
 
-.game {
+// Game buttons
+.game {    
     &__button {
         border: solid 2px grey;
 
@@ -34,9 +31,52 @@ body {
             display: none;
         }
     }
-
 }
 
+// Scoreboard and commentary
+.status {
+    display: flex;
+    flex-wrap: wrap;
+
+    &__round {
+        width: 50%;
+        padding-left: 5px;
+    }
+
+    &__score {
+        text-align: right;
+        width: 50%;
+        padding-right: 5px;
+    }
+
+    &__moves {
+        width: 100%;
+        padding-left: 0;
+        list-style: none;
+    }
+}
+
+.move {
+    display: flex;
+
+    &__options {
+        width: 50%;
+
+        &:before {
+            content: "R. ";
+
+            @media (min-width: 450px) {
+                content: "Round ";
+            }
+        }
+    }
+
+    &__result {
+        width: 60%;
+    }
+}
+
+// player controls
 .player1 {
     .game--won &,
     .game--type3 & {
@@ -52,6 +92,7 @@ body {
     }
 }
 
+// expanded rules
 .lizard-spock {
     display: none;
 
