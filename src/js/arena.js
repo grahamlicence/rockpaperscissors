@@ -292,10 +292,13 @@ const arena = {
         this.player1.reset();
         this.player2.reset();
         match.reset();
+
         this.winner = null;
         this.lastMatch = null;
         this.moves = [];
         this.updateScoreBoard();
+        this.bestOf = 3;
+        this.html.extend.innerText = `Best of 5?`;
         this.html.game.className = this.html.game.className.replace(' game--won', '');
 
         // restart simulation 
