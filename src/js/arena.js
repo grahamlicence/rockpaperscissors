@@ -12,11 +12,18 @@ const arena = {
     player2: null,
     winner: null,
 
+    /**
+     * Sets the games players
+     * @param {Object} players each game player
+     */
     setPlayers: function(players) {
         this.player1 = players.player1;
         this.player2 = players.player2;
     },
 
+    /**
+     * Sets the game to play against computer
+     */
     setPlayerVsComputer: function() {
         const players = {player1: new player(), player2: new computer()}
         if (this.simulation) {
@@ -26,12 +33,18 @@ const arena = {
         this.resetGame();
     },
 
+    /**
+     * Sets the game to simulation mode
+     */
     setComputerVsComputer: function() {
         const players = {player1: new computer(), player2: new computer()}
         this.setPlayers(players);
         this.resetGame();
     },
 
+    /**
+     * Sets the game to have 2 players
+     */
     setPlayerVsPlayer: function() {
         const players = {player1: new player(), player2: new player()}
         if (this.simulation) {
@@ -41,6 +54,9 @@ const arena = {
         this.resetGame();
     },
 
+    /**
+     * Removes any previous classes on the game, without changing any other added classes
+     */
     clearGameTypeClass: function() {
         this.html.game.className = this.html.game.className
             .replace(' game--type1', '')
@@ -48,6 +64,10 @@ const arena = {
             .replace(' game--type3', '')
     },
 
+    /**
+     * Called when a player settings button clicked
+     * @param  {Object} e click eventn]
+     */
     changePlayers: function(e) {
         const {type} = e.target.dataset;
 
@@ -71,6 +91,14 @@ const arena = {
         }
     },
 
+    /**
+     * Changes the game rules from standard to 5 option rock, paper, scissors, lizard, spock
+     * 
+     * Although the current rules list is hard coded, it could easily be changed to 
+     * allow the user to add more rules and set each outcome
+     * 
+     * @param  {Object} e click event
+     */
     toggleGameRules: function(e) {
         const {rulesCount, html} = this,
             newClass = rulesCount === 3 ? ' game--lizard-spock' : '',
@@ -83,17 +111,27 @@ const arena = {
         this.resetGame();
     },
 
+    /**
+     * Get a selection for each computer player
+     */
     simulateMove: function() {
         this.player1.choose(this.rulesCount);
         this.player2.choose(this.rulesCount);
         this.checkSelections();
     },
 
+    /**
+     * Called to simulate a game between computer players
+     */
     startSimulation: function() {
         this.simulation = setInterval(this.simulateMove.bind(this), 1500);
     },
 
-    setScore: function(score) {
+    /**
+     * Checks the score to see if we have a winner
+     * @param  {Object} score game score for each player
+     */
+    checkForWinner: function(score) {
         let hasWinner = false;
         if (score.player1 === this.movesToWin) {
             this.winner = 'player1';
@@ -113,7 +151,7 @@ const arena = {
      * Displays game score, moves and winner
      */
     updateScoreBoard: function() {
-        this.setScore(match.getScore());
+        this.checkForWinner(match.getScore());
 
         const {score, moves, winner} = this,
             round = match.getRound();
@@ -144,6 +182,7 @@ const arena = {
 
     /**
      * Used to save each game move
+     * @param  {Object} options  player selections for game rounf
      */
     storeMoveOutcome: function(options) {
         const {lastMatch} = this,
@@ -154,7 +193,7 @@ const arena = {
     },
 
     /**
-     * When both players chosen, play game round
+     * When both players chosen an option, play game round
      */
     checkSelections: function() {
         // get computer's selection on player vs computer
@@ -173,6 +212,11 @@ const arena = {
         }
     },
 
+    /**
+     * Called when a player chooses an option
+     * @param  {Object} event  click event
+     * @param  {Object} params player1 or player 2
+     */
     onPlayerSelect: function(event, params) {
         const {target} = event,
             {player} = params;
@@ -182,6 +226,9 @@ const arena = {
         this.checkSelections();
     },
 
+    /**
+     * Called after game round ended]
+     */
     endRound: function() {
         const {player1, player2} = this.html;
 
@@ -197,6 +244,7 @@ const arena = {
 
     /**
      * Called to clear all stats for current game
+     * @param  {Object} e click event
      */
     resetGame: function(e) {
         if (e) {
@@ -221,9 +269,9 @@ const arena = {
     },
     
     /**
-     * Adds listeners to play game
+     * Adds listeners to game buttons
      */
-    start: function() {
+    setUpGame: function() {
         const {player1, player2, restart, type, toggle} = this.html;
         this.updateScoreBoard();
 
@@ -237,11 +285,15 @@ const arena = {
         toggle.addEventListener('click', (e) => this.toggleGameRules(e));
     },
 
+    /**
+     * Set up the players and start the game
+     * @param  {Object} html dom elements used for the game
+     */
     init: function(html) {
         this.html = html;
 
         this.setPlayerVsComputer();
-        this.start();
+        this.setUpGame();
     }
 }
 

@@ -6,7 +6,7 @@ describe('match', () => {
         expect(match.getScore()).to.deep.equal({player1: 0, player2: 0});
     });
 
-    it('should play a game', () => {
+    it('should play a game round', () => {
         const playerOptions = {
                 player1: 'rock',
                 player2: 'paper'
@@ -15,11 +15,11 @@ describe('match', () => {
         expect(match.getScore()).to.deep.equal({player1: 0, player2: 1});
     });
 
-    it('should update the round count after each game', () => {
+    it('should update the round count after each game round', () => {
         expect(match.getRound()).to.equal(2);
     });
 
-    it('should reset the game', () => {
+    it('should reset', () => {
         match.reset();
         expect(match.getScore()).to.deep.equal({player1: 0, player2: 0});
         expect(match.getRound()).to.equal(1);

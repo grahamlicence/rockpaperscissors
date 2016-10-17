@@ -1,9 +1,14 @@
 * {
     box-sizing: border-box;
+
+    &::before,
+    &::after {
+        box-sizing: border-box;
+    }
 }
 
 // Game buttons
-.game {    
+.game {
     &__button {
         border: solid 2px grey;
 
@@ -39,20 +44,20 @@
     flex-wrap: wrap;
 
     &__round {
-        width: 50%;
         padding-left: 5px;
+        width: 50%;
     }
 
     &__score {
+        padding-right: 5px;
         text-align: right;
         width: 50%;
-        padding-right: 5px;
     }
 
     &__moves {
-        width: 100%;
-        padding-left: 0;
         list-style: none;
+        padding-left: 0;
+        width: 100%;
     }
 }
 
@@ -62,11 +67,11 @@
     &__options {
         width: 50%;
 
-        &:before {
-            content: "R. ";
+        &::before {
+            content: 'R. ';
 
             @media (min-width: 450px) {
-                content: "Round ";
+                content: 'Round ';
             }
         }
     }
