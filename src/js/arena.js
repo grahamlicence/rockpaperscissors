@@ -1,6 +1,7 @@
 import player from './player';
 import computer from './computer';
 import match from './match';
+import templates from './templates';
 
 const arena = {
     gameType: 'pvc',
@@ -198,9 +199,7 @@ const arena = {
         
         if (moves.length) {
             for (let i = moves.length - 1; i > -1; i--) {
-                previousMoves += `<li class="move">
-                    <span class="move__options">${i + 1} ${moves[i].move}</span> 
-                    <span class="move__result">${moves[i].result}</li>`;
+                previousMoves += templates.previousMove({option: `${i + 1} ${moves[i].move}`, result: moves[i].result});
             }
         }
         
@@ -214,6 +213,7 @@ const arena = {
      */
     storeMoveOutcome(options) {
         const {lastMatch} = this,
+            {player1, player2} = options,
             result = lastMatch === 'draw' ? lastMatch : `${lastMatch} wins round`;
         let move = '',
             divider = '&mdash;';
@@ -224,9 +224,7 @@ const arena = {
         if (lastMatch === 'player2') {
             divider = '<'
         }
-        move = `<span class="move__option move__option--player1">${options.player1}</span> 
-            ${divider} 
-            <span class="move__option move__option--player2">${options.player2}</span>`;
+        move = templates.move({divider, option1: player1, option2: player2});
         
         this.moves.push({move, result});
     },

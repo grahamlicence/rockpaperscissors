@@ -27,6 +27,7 @@ describe('arena', () => {
         const dummyClick = {preventDefault: () => {}};
         arena.html = {
             extend: {innerText:'', className: ''},
+            game: {className: ''},
             status: {
                 moves: {innerHTML:''},
                 round: {innerHTML:''},
