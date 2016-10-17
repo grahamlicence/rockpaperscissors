@@ -33,7 +33,9 @@ describe('arena', () => {
                 round: {innerHTML:''},
                 score: {innerHTML:''},
                 winner: {innerHTML:''}
-            }
+            },
+            player1: [{parentElement: {className: ''}}],
+            player2: [{parentElement: {className: ''}}]
         };
         arena.extendGame(dummyClick);
         expect(arena.bestOf).to.equal(5);

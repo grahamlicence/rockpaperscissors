@@ -1,3 +1,25 @@
+@import "images";
+
+// Variables
+$background: #97c6d7;
+$modal: #bdc099;
+$button: #98937e;
+$white: #f9f7f7;
+$green: #005734;
+$yellow: #ff0;
+$black: #000;
+$orange: #ff9800;
+
+// mixins
+@mixin hidden {
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 1px;
+    overflow: hidden;
+    position: absolute !important;
+    width: 1px;
+}
+
+// simple reset
 * {
     box-sizing: border-box;
 
@@ -7,27 +29,52 @@
     }
 }
 
+body {
+    background: $background;
+}
+
+button {
+    cursor: pointer;
+}
+
+p {
+    margin: 0;
+    font-family: Helvetica;
+}
+
 .game {
-    
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+
     // Game buttons
     &__button {
-        border: solid 2px grey;
+        background: $button;
+        border: solid 2px $green;
+        border-radius: 5px;
+        margin: 0 0 1em;
+        color: $white;
+        padding: 10px 15px;
+        font-size: 1.1em;
 
         &--1 {
             .game--type1 & {
-                border-color: yellow;
+                opacity: 0.3;
+                cursor: default;
             }
         }
 
         &--2 {
             .game--type2 & {
-                border-color: yellow;
+                opacity: 0.3;
+                cursor: default;
             }
         }
 
         &--3 {
             .game--type3 & {
-                border-color: yellow;
+                opacity: 0.3;
+                cursor: default;
             }
         }
     }
@@ -45,22 +92,90 @@
             display: inline-block;
         }
     }
+
+    &__change {
+        background: none;
+        border: none;
+        font-size: 30px;
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        z-index: 2;
+
+        span {
+            @include hidden;
+        }
+
+        &::after {
+            content: '\2699';
+        }
+
+        &--open {
+            &::after {
+                content: '\2716';
+            }
+        }
+    }
+
+    // Settings
+    &__settings {
+        align-items: center;
+        background: $modal;
+        bottom: 0;
+        display: none;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        vertical-align: middle;
+        z-index: 1;
+
+        p {
+            margin-bottom: 1em;
+        }
+
+        &--open {
+            display: flex;
+        }
+    }
+
+    &__settings-content {
+        width: 100%;
+        text-align: center;
+    }
+
+    &__type,
+    &__rules {
+
+        .game__button {
+            display: block;
+            margin: 0 auto 2em;
+        }
+    }
 }
 
 // Scoreboard and commentary
 .status {
     display: flex;
     flex-wrap: wrap;
+    padding: 2em 0;
 
     &__round {
         padding-left: 5px;
         width: 50%;
     }
 
-    &__score {
+    &__winner {
         padding-right: 5px;
-        text-align: right;
         width: 50%;
+    }
+
+    &__score {
+        width: 100%;
+        font-size: 20px;
+        font-family: monospace;
+        margin-bottom: 1em;
+        text-align: center;
     }
 
     &__moves {
@@ -92,18 +207,149 @@
 
 // player controls
 .player1 {
-    .game--won &,
     .game--type3 & {
         display: none;
     }
 }
 
 .player2 {
-    .game--won &,
     .game--type2 &,
     .game--type3 & {
         display: none;
     }
+}
+
+.player1,
+.player2 {
+    position: relative;
+
+    &::after {
+        bottom: 0;
+        color: $white;
+        content: 'game over';
+        display: none;
+        font-size: 20px;
+        left: 0;
+        padding-top: 27%;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        text-shadow: 1px 1px 1px $black;
+        text-transform: uppercase;
+        top: 0;
+    }
+
+    .game--won & {
+
+        .options {
+            opacity: 0.3;
+        }
+
+        &::after {
+            display: block;
+        }
+    }
+}
+
+// options
+.options {
+    display: flex;
+    margin-bottom: 1em;
+
+    &--chosen {
+        position: relative;
+
+        &::after {
+            align-content: center;
+            align-items: center;
+            align-self: center;
+            background: $black;
+            bottom: 0;
+            color: white;
+            content: 'chosen';
+            display: flex;
+            left: 0;
+            padding-left: 41%;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 100%;
+        }
+    }
+}
+
+.option {
+    background: $black;
+    color: $white;
+    cursor: pointer;
+    padding-bottom: 10px;
+    text-align: center;
+    width: percentage(1/3);
+
+    &::before {
+        background: no-repeat $yellow 0 0;
+        background-size: contain;
+        content: '';
+        display: block;
+        height: 100px;
+        margin: 0 auto;
+        transition: background-color 0.3s;
+        width: 100px;
+    }
+
+    &:hover,
+    &:active {
+        &::before {
+            background-color: $orange;
+        }
+    }
+
+    .game--lizard-spock & {
+        width: percentage(1/5);
+
+        &::before {
+            height: 70px;
+            width: 70px;
+            @media (min-width: 650px) {
+                height: 100px;
+                width: 100px;
+            }
+        }
+    }
+
+    &-1 {
+        &::before {
+            @include rock;
+        }
+    }
+
+    &-2 {
+        &::before {
+            @include paper;
+        }
+    }
+
+    &-3 {
+        &::before {
+            @include scissors;
+        }
+    }
+
+    &-4 {
+        &::before {
+            @include lizard;
+        }
+    }
+
+    &-5 {
+        &::before {
+            @include spock;
+        }
+    }
+}
+
+.option-input {
+    @include hidden;
 }
 
 // expanded rules

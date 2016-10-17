@@ -9,84 +9,87 @@
 </head>
 <body>
 	<main class="game game--type2">
+        <button class="game__change"><span>Change settings</span></button>
 
         <form class="game__settings" action="/change-game" method="post">
-            <div class="game__type">
-                <button class="game__button game__button--1" data-type="pvp">Player vs Player</button>
-                <button class="game__button game__button--2" data-type="pvc">Player vs Computer</button>
-                <button class="game__button game__button--3" data-type="cvc">Computer vs Computer</button>
+            <div class="game__settings-content">
+                <div class="game__type">
+                    <p>Change game type:</p>
+                    <button class="game__button game__button--1" data-type="pvp">Player vs Player</button>
+                    <button class="game__button game__button--2" data-type="pvc">Player vs Computer</button>
+                    <button class="game__button game__button--3" data-type="cvc">Computer vs Computer</button>
+                </div>
+                <div class="game__rules">
+                    <p>Use rules:</p>
+                    <button class="game__button game__toggle">..Lizard, Spock</button>
+                </div>
             </div>
-            <p>Use rules: <button class="game__toggle">..Lizard, Spock</button></p>
         </form>
 
         <form class="game__arena" action="/play-game" method="post">
             <div class="status">
-                <p class="status__score"></p>
-                <p class="status__round"></p>
-                <p class="status__winner"></p>
+                <p class="status__score">0-0</p>
+                <p class="status__winner">Player Vs Computer - Begin game!</p>
+                <p class="status__round">Round 1</p>
             </div>
 
             <div class="player1">
                 <p>Player1</p>
-                <div class="player1__options">
-                    <label class="option1">
+                <div class="player1__options options">
+                    <label class="option option-1">
                         Rock
-                        <input type="checkbox" class="option" value="rock" />
+                        <input type="checkbox" class="option-input" value="rock" />
                     </label>
-                    <label class="option2">
+                    <label class="option option-2">
                         Paper
-                        <input type="checkbox" class="option" value="paper" />
+                        <input type="checkbox" class="option-input" value="paper" />
                     </label>
-                    <label class="option3">
+                    <label class="option option-3">
                         Scissors
-                        <input type="checkbox" class="option" value="scissors" />
+                        <input type="checkbox" class="option-input" value="scissors" />
                     </label>
-                    <div class="lizard-spock">
-                        <label class="option4">
-                            Lizard
-                            <input type="checkbox" class="option" value="lizard" />
-                        </label>
-                        <label class="option5">
-                            Spock
-                            <input type="checkbox" class="option" value="spock" />
-                        </label>
-                    </div>
+                    <label class="lizard-spock option option-4">
+                        Lizard
+                        <input type="checkbox" class="option-input" value="lizard" />
+                    </label>
+                    <label class="lizard-spock option option-5">
+                        Spock
+                        <input type="checkbox" class="option-input" value="spock" />
+                    </label>
                 </div>
             </div>
 
             <div class="player2">
                 <p>Player2</p>
-                <div class="player2__options">
-                    <label class="option1">
+                <div class="player2__options options">
+                    <label class="option option-1">
                         Rock
-                        <input type="checkbox" class="option" value="rock" />
+                        <input type="checkbox" class="option-input" value="rock" />
                     </label>
-                    <label class="option2">
+                    <label class="option option-2">
                         Paper
-                        <input type="checkbox" class="option" value="paper" />
+                        <input type="checkbox" class="option-input" value="paper" />
                     </label>
-                    <label class="option3">
+                    <label class="option option-3">
                         Scissors
-                        <input type="checkbox" class="option" value="scissors" />
+                        <input type="checkbox" class="option-input" value="scissors" />
                     </label>
-                    <div class="lizard-spock">
-                        <label class="option4">
-                            Lizard
-                            <input type="checkbox" class="option" value="lizard" />
-                        </label>
-                        <label class="option5">
-                            Spock
-                            <input type="checkbox" class="option" value="spock" />
-                        </label>
-                    </div>
+                    <label class="lizard-spock option option-4">
+                        Lizard
+                        <input type="checkbox" class="option-input" value="lizard" />
+                    </label>
+                    <label class="lizard-spock option option-5">
+                        Spock
+                        <input type="checkbox" class="option-input" value="spock" />
+                    </label>
                 </div>
             </div>
 
-            <button class="game__restart" type="submit">Restart game</button>
-            <button class="game__extend" type="submit">Best of 5?</button>
+            <button class="game__button game__restart" type="submit">Restart game</button>
+            <button class="game__button game__extend" type="submit">Best of 5?</button>
 
             <!-- allows for on js play of game, displays error if more than 1 option selected -->
-            <button class="game__submit" type="submit">Play game</button>
+            <button class="game__button game__submit" type="submit">Play game</button>
 
             <div class="status">
                 <ol class="status__moves"></ol>

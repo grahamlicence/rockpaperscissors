@@ -3,11 +3,13 @@ require('../css/main.scss');
 import arena from './arena';
 
 const html = {
-    game: document.getElementsByClassName('game')[0],
+    change: document.getElementsByClassName('game__change')[0],
     extend: document.getElementsByClassName('game__extend')[0],
+    game: document.getElementsByClassName('game')[0],
     player1: document.getElementsByClassName('player1__options')[0].getElementsByClassName('option'),
     player2: document.getElementsByClassName('player2__options')[0].getElementsByClassName('option'),
     restart: document.getElementsByClassName('game__restart')[0],
+    settings: document.getElementsByClassName('game__settings')[0],
     status: {
         moves: document.getElementsByClassName('status__moves')[0],
         round: document.getElementsByClassName('status__round')[0],

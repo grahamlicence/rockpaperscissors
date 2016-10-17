@@ -12,6 +12,7 @@ const arena = {
     player1: null,
     player2: null,
     winner: null,
+    settingsOpen: false,
 
     /**
      * Sets the games players
@@ -71,6 +72,15 @@ const arena = {
         const {type} = e.target.dataset;
 
         e.preventDefault();
+
+        if (type === this.gameType) {
+            return;
+        }
+
+        if (this.settingsOpen) {
+            this.toggleSettings();
+        }
+
         this.gameType = type;
         this.clearGameTypeClass();
 
@@ -102,11 +112,18 @@ const arena = {
         const {rulesCount, html} = this,
             newClass = rulesCount === 3 ? ' game--lizard-spock' : '',
             oldClass = rulesCount === 3 ? '' : ' game--lizard-spock';
+
         e.preventDefault();
         this.rulesCount = rulesCount === 3 ? 5 : 3;
         html.toggle.innerHTML = rulesCount === 3 ? 'Rock, Paper, Scissors' : '..Lizard, Spock';
+
+        if (this.settingsOpen) {
+            this.toggleSettings();
+        }
+
         html.game.className = html.game.className.replace(oldClass, '');
         html.game.className += newClass;
+
         this.resetGame();
     },
 
@@ -181,9 +198,9 @@ const arena = {
     updateScoreBoard() {
         this.checkForWinner(match.getScore());
 
-        const {score, moves, winner, html} = this,
+        const {score, moves, winner, html, gameType} = this,
             round = match.getRound();
-        let result = 'Begin game!',
+        let result = '',
             previousMoves = '';
 
         html.status.score.innerHTML = `${score.player1}-${score.player2}`;
@@ -195,6 +212,18 @@ const arena = {
             html.extend.className += ' game__extend--active';
         } else if (moves.length) {
             result = moves[moves.length - 1].result;
+        } else {
+            switch(gameType) {
+                case 'pvp':
+                    result = 'Player Vs Player';
+                    break;
+                case 'pvc':
+                    result = 'Player Vs Computer';
+                    break;
+                case 'cvc':
+                    result = 'Computer Vs Computer';
+                    break;
+            }
         }
         
         if (moves.length) {
@@ -205,6 +234,9 @@ const arena = {
         
         html.status.winner.innerHTML = result;
         html.status.moves.innerHTML = previousMoves;
+        html.player1[0].parentElement.className = html.player1[0].parentElement.className.replace(/ options--chosen/g, '');
+        html.player2[0].parentElement.className = html.player2[0].parentElement.className.replace(/ options--chosen/g, '');
+
     },
 
     /**
@@ -260,6 +292,8 @@ const arena = {
         
         this[player].choose(target.value);
 
+        this.html[player][0].parentElement.className += ' options--chosen'
+
         this.checkSelections();
     },
 
@@ -306,12 +340,29 @@ const arena = {
             this.startSimulation();
         }
     },
+
+    /**
+     * Opens game options menu on mobile
+     * @param  {Object} e click event 
+     */
+    toggleSettings(e) {
+        if (e) {
+            e.preventDefault();
+        }
+        const {settingsOpen} = this,
+            settingsClass = settingsOpen ? 'game__settings' : 'game__settings game__settings--open',
+            buttonClass = settingsOpen ? 'game__change' : 'game__change game__change--open';
+
+        this.settingsOpen = !settingsOpen;
+        this.html.settings.className = settingsClass;
+        this.html.change.className = buttonClass;
+    },
     
     /**
      * Adds listeners to game buttons
      */
     setUpGame() {
-        const {extend, player1, player2, restart, type, toggle} = this.html;
+        const {extend, player1, player2, restart, change, type, toggle} = this.html;
 
         // allow for any number of options
         for (let i = 0; i < player1.length; i++) {
@@ -320,6 +371,7 @@ const arena = {
         }
         extend.addEventListener('click', (e) => this.extendGame(e));
         restart.addEventListener('click', (e) => this.resetGame(e));
+        change.addEventListener('click', (e) => this.toggleSettings(e));
         toggle.addEventListener('click', (e) => this.toggleGameRules(e));
         type.addEventListener('click', (e) => this.changePlayers(e));
     },
