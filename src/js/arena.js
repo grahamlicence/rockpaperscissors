@@ -204,6 +204,7 @@ const arena = {
             previousMoves = '';
 
         html.status.score.innerHTML = `${score.player1}-${score.player2}`;
+        html.status.score2.innerHTML = `${score.player1}-${score.player2}`;
         html.status.round.innerHTML = `Round ${winner ? round - 1 : round}`;
 
         if (winner) {
@@ -351,10 +352,12 @@ const arena = {
         }
         const {settingsOpen} = this,
             settingsClass = settingsOpen ? 'game__settings' : 'game__settings game__settings--open',
+            areanaClass = settingsOpen ? 'game__arena' : 'game__arena game__arena--settings-open',
             buttonClass = settingsOpen ? 'game__change' : 'game__change game__change--open';
 
         this.settingsOpen = !settingsOpen;
         this.html.settings.className = settingsClass;
+        this.html.arena.className = areanaClass;
         this.html.change.className = buttonClass;
     },
     

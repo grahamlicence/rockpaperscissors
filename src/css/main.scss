@@ -29,6 +29,11 @@ $orange: #ff9800;
     }
 }
 
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
 body {
     background: $background;
 }
@@ -38,14 +43,16 @@ button {
 }
 
 p {
-    margin: 0;
     font-family: Helvetica;
+    margin: 0;
+    padding: 0 5px;
 }
 
 .game {
     max-width: 500px;
     margin: 0 auto;
     position: relative;
+    height: 100%;
 
     // Game buttons
     &__button {
@@ -110,9 +117,16 @@ p {
             content: '\2699';
         }
 
+        .game--type1 & {
+            top: 180px;
+        }
+
         &--open {
             &::after {
                 content: '\2716';
+            }
+            .game--type1 & {
+                top: 5px;
             }
         }
     }
@@ -152,13 +166,68 @@ p {
             margin: 0 auto 2em;
         }
     }
+
+    // 2 player mobile setting: 
+    &__arena {
+        height: 100%;
+
+        @media (max-width: 800px) {
+
+            .player1 {
+                left: 0;
+                position: absolute;
+                right: 0;
+                bottom: 0;
+
+                .options {
+                    margin-bottom: 0;
+                }
+            }
+
+            .game__extend,
+            .game__restart {
+                font-size: 13px;
+                padding: 3px 5px;
+            }
+
+            .game--type1 & {
+                padding-top: 150px;
+                position: relative;
+
+                &--settings-open {
+                    padding-top: 0;
+                }
+
+                .status__moves {
+                    display: none;
+                }
+
+                .status__score {
+                    display: block;
+                }
+
+                .player2 {
+                    left: 0;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    transform: rotate(180deg);
+
+                    .options {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
 }
 
 // Scoreboard and commentary
 .status {
     display: flex;
     flex-wrap: wrap;
-    padding: 2em 0;
+    padding: 2em 0 1em;
+    position: relative;
 
     &__round {
         padding-left: 5px;
@@ -171,11 +240,23 @@ p {
     }
 
     &__score {
-        width: 100%;
-        font-size: 20px;
         font-family: monospace;
+        font-size: 20px;
         margin-bottom: 1em;
         text-align: center;
+        width: 100%;
+
+        &--player2 {
+            display: none;
+            content: attr(data-score);
+            left: 0px;
+            padding-left: 5px;
+            position: absolute;
+            right: 0;
+            top: 8px;
+            transform: rotate(180deg);
+            width: 100%;
+        }
     }
 
     &__moves {

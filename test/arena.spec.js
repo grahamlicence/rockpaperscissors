@@ -32,6 +32,7 @@ describe('arena', () => {
                 moves: {innerHTML:''},
                 round: {innerHTML:''},
                 score: {innerHTML:''},
+                score2: {innerHTML:''},
                 winner: {innerHTML:''}
             },
             player1: [{parentElement: {className: ''}}],
