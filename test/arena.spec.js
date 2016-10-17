@@ -23,4 +23,19 @@ describe('arena', () => {
         expect(arena.winner).to.equal('player2');
     });
 
+    it('should extend the game to best of 5 if the game has been won', () => {
+        const dummyClick = {preventDefault: () => {}};
+        arena.html = {
+            extend: {innerText:'', className: ''},
+            status: {
+                moves: {innerHTML:''},
+                round: {innerHTML:''},
+                score: {innerHTML:''},
+                winner: {innerHTML:''}
+            }
+        };
+        arena.extendGame(dummyClick);
+        expect(arena.bestOf).to.equal(5);
+    });
+
 });

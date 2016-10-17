@@ -7,8 +7,9 @@
     }
 }
 
-// Game buttons
 .game {
+    
+    // Game buttons
     &__button {
         border: solid 2px grey;
 
@@ -34,6 +35,14 @@
     &__submit {
         .js & {
             display: none;
+        }
+    }
+
+    &__extend {
+        display: none;
+
+        &--active {
+            display: inline-block;
         }
     }
 }

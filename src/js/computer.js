@@ -10,7 +10,7 @@ function computer () {
      * Randomly chooses an option
      * @param  {Number} limit number of rules to use depending on game style 
      */
-    this.choose = function(limit) {
+    this.choose = (limit) => {
         const options = Object.keys(rules),
             selection = Math.floor(Math.random() * limit);
 
@@ -21,14 +21,14 @@ function computer () {
      * What's been chosen?
      * @return {String|null} player's choice
      */
-    this.getChoice = function() {
+    this.getChoice = () => {
         return this.choice;
     }
 
     /**
      * Resets the player's choice
      */
-    this.reset = function() {
+    this.reset = () => {
         this.choice = null;
     }
 }

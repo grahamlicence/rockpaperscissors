@@ -1,7 +1,7 @@
 import gamePlay from './gamePlay';
 
 /**
- * Handles game play and game scores
+ * Handles game play and scores
  */
 const match = {
     round: 1,
@@ -12,7 +12,7 @@ const match = {
      * @param  {Object} options the selections for each player
      * @return {String}         the outcome of the round
      */
-    play: function(options) {
+    play(options) {
         const outcome = gamePlay(options);
 
         if (outcome === 'player1') {
@@ -30,21 +30,21 @@ const match = {
     /**
      * @return {Object} current game score
      */
-    getScore: function() {
+    getScore() {
         return this.score;
     },
 
     /**
      * @return {Number} current game round
      */
-    getRound: function() {
+    getRound() {
         return this.round;
     },
 
     /**
      * Reset the game
      */
-    reset: function() {
+    reset() {
         this.round = 1;
         this.score = {player1: 0, player2: 0};
     }

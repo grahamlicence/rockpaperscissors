@@ -6,7 +6,7 @@ const arena = {
     gameType: 'pvc',
     lastMatch: null,
     moves: [],
-    movesToWin: 2,
+    bestOf: 3,
     rulesCount: 3,
     player1: null,
     player2: null,
@@ -16,7 +16,7 @@ const arena = {
      * Sets the games players
      * @param {Object} players each game player
      */
-    setPlayers: function(players) {
+    setPlayers(players) {
         this.player1 = players.player1;
         this.player2 = players.player2;
     },
@@ -24,11 +24,10 @@ const arena = {
     /**
      * Sets the game to play against computer
      */
-    setPlayerVsComputer: function() {
+    setPlayerVsComputer() {
         const players = {player1: new player(), player2: new computer()}
-        if (this.simulation) {
-            clearInterval(this.simulation);
-        }
+
+        this.endSimulation();
         this.setPlayers(players);
         this.resetGame();
     },
@@ -36,7 +35,7 @@ const arena = {
     /**
      * Sets the game to simulation mode
      */
-    setComputerVsComputer: function() {
+    setComputerVsComputer() {
         const players = {player1: new computer(), player2: new computer()}
         this.setPlayers(players);
         this.resetGame();
@@ -45,11 +44,10 @@ const arena = {
     /**
      * Sets the game to have 2 players
      */
-    setPlayerVsPlayer: function() {
+    setPlayerVsPlayer() {
         const players = {player1: new player(), player2: new player()}
-        if (this.simulation) {
-            clearInterval(this.simulation);
-        }
+        
+        this.endSimulation();
         this.setPlayers(players);
         this.resetGame();
     },
@@ -57,7 +55,7 @@ const arena = {
     /**
      * Removes any previous classes on the game, without changing any other added classes
      */
-    clearGameTypeClass: function() {
+    clearGameTypeClass() {
         this.html.game.className = this.html.game.className
             .replace(' game--type1', '')
             .replace(' game--type2', '')
@@ -68,7 +66,7 @@ const arena = {
      * Called when a player settings button clicked
      * @param  {Object} e click eventn]
      */
-    changePlayers: function(e) {
+    changePlayers(e) {
         const {type} = e.target.dataset;
 
         e.preventDefault();
@@ -99,7 +97,7 @@ const arena = {
      * 
      * @param  {Object} e click event
      */
-    toggleGameRules: function(e) {
+    toggleGameRules(e) {
         const {rulesCount, html} = this,
             newClass = rulesCount === 3 ? ' game--lizard-spock' : '',
             oldClass = rulesCount === 3 ? '' : ' game--lizard-spock';
@@ -112,9 +110,28 @@ const arena = {
     },
 
     /**
+     * Extends the game win margin so best of 3 becomes best of 5
+     * @param  {Object} e click event
+     */
+    extendGame(e) {
+        const {html, gameType} = this;
+
+        e.preventDefault();
+        this.bestOf = this.bestOf + 2;
+        this.winner = null;
+        html.extend.innerText = `Best of ${this.bestOf + 2}?`;
+        html.extend.className = html.extend.className.replace(' game__extend--active', '');
+        html.game.className = html.game.className.replace(' game--won', '');
+        this.updateScoreBoard();
+        if (gameType === 'cvc') {
+            this.startSimulation();
+        }
+    },
+
+    /**
      * Get a selection for each computer player
      */
-    simulateMove: function() {
+    simulateMove() {
         this.player1.choose(this.rulesCount);
         this.player2.choose(this.rulesCount);
         this.checkSelections();
@@ -123,47 +140,58 @@ const arena = {
     /**
      * Called to simulate a game between computer players
      */
-    startSimulation: function() {
+    startSimulation() {
         this.simulation = setInterval(this.simulateMove.bind(this), 1500);
+    },
+
+    /**
+     * Stops simulation when there is a winner or the game type is changes
+     */
+    endSimulation() {
+        if (this.simulation) {
+            clearInterval(this.simulation);
+        }
     },
 
     /**
      * Checks the score to see if we have a winner
      * @param  {Object} score game score for each player
      */
-    checkForWinner: function(score) {
+    checkForWinner(score) {
+        const {player1, player2} = score,
+            gamesForWin = Math.ceil(this.bestOf / 2);
         let hasWinner = false;
-        if (score.player1 === this.movesToWin) {
-            this.winner = 'player1';
+
+        if (player1 === gamesForWin || player2 === gamesForWin) {
             hasWinner = true;
+            this.winner = player1 > player2 ? 'player1' : 'player2';
         }
-        if (score.player2 === this.movesToWin) {
-            this.winner = 'player2';
-            hasWinner = true;
-        }
+
         if (this.simulation && hasWinner) {
-            clearInterval(this.simulation);
+            this.endSimulation();
         }
+        
         this.score = score;
     },
 
     /**
      * Displays game score, moves and winner
      */
-    updateScoreBoard: function() {
+    updateScoreBoard() {
         this.checkForWinner(match.getScore());
 
-        const {score, moves, winner} = this,
+        const {score, moves, winner, html} = this,
             round = match.getRound();
         let result = 'Begin game!',
             previousMoves = '';
 
-        this.html.status.score.innerHTML = `${score.player1}-${score.player2}`;
-        this.html.status.round.innerHTML = `Round ${winner ? round - 1 : round}`;
+        html.status.score.innerHTML = `${score.player1}-${score.player2}`;
+        html.status.round.innerHTML = `Round ${winner ? round - 1 : round}`;
 
         if (winner) {
             result = `${winner} wins game!`;
-            this.html.game.className += ' game--won';
+            html.game.className += ' game--won';
+            html.extend.className += ' game__extend--active';
         } else if (moves.length) {
             result = moves[moves.length - 1].result;
         }
@@ -176,18 +204,29 @@ const arena = {
             }
         }
         
-        this.html.status.winner.innerHTML = result;
-        this.html.status.moves.innerHTML = previousMoves;
+        html.status.winner.innerHTML = result;
+        html.status.moves.innerHTML = previousMoves;
     },
 
     /**
      * Used to save each game move
      * @param  {Object} options  player selections for game rounf
      */
-    storeMoveOutcome: function(options) {
+    storeMoveOutcome(options) {
         const {lastMatch} = this,
-            move = `${options.player1} - ${options.player2}`,
             result = lastMatch === 'draw' ? lastMatch : `${lastMatch} wins round`;
+        let move = '',
+            divider = '&mdash;';
+
+        if (lastMatch === 'player1') {
+            divider = '>'
+        }
+        if (lastMatch === 'player2') {
+            divider = '<'
+        }
+        move = `<span class="move__option move__option--player1">${options.player1}</span> 
+            ${divider} 
+            <span class="move__option move__option--player2">${options.player2}</span>`;
         
         this.moves.push({move, result});
     },
@@ -195,7 +234,7 @@ const arena = {
     /**
      * When both players chosen an option, play game round
      */
-    checkSelections: function() {
+    checkSelections() {
         // get computer's selection on player vs computer
         if (this.gameType === 'pvc') {
             this.player2.choose(this.rulesCount);
@@ -217,7 +256,7 @@ const arena = {
      * @param  {Object} event  click event
      * @param  {Object} params player1 or player 2
      */
-    onPlayerSelect: function(event, params) {
+    onPlayerSelect(event, params) {
         const {target} = event,
             {player} = params;
         
@@ -229,7 +268,7 @@ const arena = {
     /**
      * Called after game round ended]
      */
-    endRound: function() {
+    endRound() {
         const {player1, player2} = this.html;
 
         this.player1.reset();
@@ -246,13 +285,12 @@ const arena = {
      * Called to clear all stats for current game
      * @param  {Object} e click event
      */
-    resetGame: function(e) {
+    resetGame(e) {
         if (e) {
             e.preventDefault();
         }
-        if (this.simulation) {
-            clearInterval(this.simulation);
-        }
+        
+        this.endSimulation();
         this.player1.reset();
         this.player2.reset();
         match.reset();
@@ -271,29 +309,30 @@ const arena = {
     /**
      * Adds listeners to game buttons
      */
-    setUpGame: function() {
-        const {player1, player2, restart, type, toggle} = this.html;
-        this.updateScoreBoard();
+    setUpGame() {
+        const {extend, player1, player2, restart, type, toggle} = this.html;
 
         // allow for any number of options
         for (let i = 0; i < player1.length; i++) {
             player1[i].addEventListener('click', (e) => this.onPlayerSelect(e, {player: 'player1'}));
             player2[i].addEventListener('click', (e) => this.onPlayerSelect(e, {player: 'player2'}));
         }
+        extend.addEventListener('click', (e) => this.extendGame(e));
         restart.addEventListener('click', (e) => this.resetGame(e));
-        type.addEventListener('click', (e) => this.changePlayers(e));
         toggle.addEventListener('click', (e) => this.toggleGameRules(e));
+        type.addEventListener('click', (e) => this.changePlayers(e));
     },
 
     /**
-     * Set up the players and start the game
-     * @param  {Object} html dom elements used for the game
+     * Set game listeners and set up the players to start the game
+     * @param  {Object} html DOM elements used for the game
      */
-    init: function(html) {
+    init(html) {
         this.html = html;
 
-        this.setPlayerVsComputer();
         this.setUpGame();
+
+        this.setPlayerVsComputer();
     }
 }
 

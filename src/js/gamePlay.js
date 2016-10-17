@@ -1,7 +1,7 @@
 import rules from './rules';
 
 /**
- * Used by match to determine the outcome of a game
+ * Used by match to determine the outcome of a game round
  * @param  {Object} players selected options for each player
  * @return {String}         game outcome
  */
