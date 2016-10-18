@@ -290,10 +290,10 @@ const arena = {
      * @param  {Object} params player1 or player 2
      */
     onPlayerSelect(event, params) {
-        const {target} = event,
-            {player} = params;
+        const {player, option} = params,
+            value = this.html[`${player}input`][option].value;
         
-        this[player].choose(target.value);
+        this[player].choose(value);
 
         this.html[player][0].parentElement.className += ' options--chosen'
 
@@ -374,8 +374,8 @@ const arena = {
 
         // allow for any number of options
         for (let i = 0; i < player1.length; i++) {
-            player1[i].addEventListener('click', (e) => this.onPlayerSelect(e, {player: 'player1'}));
-            player2[i].addEventListener('click', (e) => this.onPlayerSelect(e, {player: 'player2'}));
+            player1[i].addEventListener('click', (e) => this.onPlayerSelect(e, {player: 'player1', option: i}));
+            player2[i].addEventListener('click', (e) => this.onPlayerSelect(e, {player: 'player2', option: i}));
         }
         extend.addEventListener('click', (e) => this.extendGame(e));
         restart.addEventListener('click', (e) => this.resetGame(e));

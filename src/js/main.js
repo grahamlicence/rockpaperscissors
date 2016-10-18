@@ -9,6 +9,8 @@ const html = {
     arena: document.getElementsByClassName('game__arena')[0],
     player1: document.getElementsByClassName('player1__options')[0].getElementsByClassName('option'),
     player2: document.getElementsByClassName('player2__options')[0].getElementsByClassName('option'),
+    player1input: document.getElementsByClassName('player1__options')[0].getElementsByClassName('option-input'),
+    player2input: document.getElementsByClassName('player2__options')[0].getElementsByClassName('option-input'),
     restart: document.getElementsByClassName('game__restart')[0],
     settings: document.getElementsByClassName('game__settings')[0],
     status: {

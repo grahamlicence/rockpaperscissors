@@ -38,10 +38,6 @@ body {
     margin: 0;
 }
 
-body {
-    background: $background;
-}
-
 button {
     cursor: pointer;
 }
@@ -53,6 +49,7 @@ p {
 }
 
 .game {
+    background: $background;
     height: 100%;
     margin: 0 auto;
     max-width: 500px;
@@ -60,6 +57,10 @@ p {
 
     @media (min-width: 800px) {
         max-width: 800px;
+        padding: 0 10px;
+    }
+    @media (min-width: 950px) {
+        max-width: 950px;
     }
 
     // Game buttons
@@ -112,6 +113,7 @@ p {
         background: none;
         border: 0;
         font-size: 30px;
+        padding: 0;
         position: absolute;
         right: 5px;
         top: 5px;
@@ -234,6 +236,7 @@ p {
                     position: absolute;
                     right: 0;
                     top: 0;
+                    -webkit-transform: rotate(180deg);
                     transform: rotate(180deg);
 
                     .options {
@@ -257,8 +260,8 @@ p {
         width: 50%;
 
         @media (max-width: 800px) {
-            .game--type1 &,
-            .game--type2 & {
+            .game--type1 & {
+            // .game--type2 & {
                 bottom: 180px;
                 position: absolute;
             }
@@ -269,9 +272,13 @@ p {
         padding-right: 5px;
         width: 50%;
 
+        &::first-letter {
+            text-transform: uppercase;
+        }
+
         @media (max-width: 800px) {
-            .game--type1 &,
-            .game--type2 & {
+            .game--type1 & {
+            // .game--type2 & {
                 bottom: 150px;
                 position: absolute;
             }
@@ -300,6 +307,7 @@ p {
             content: attr(data-score);
             display: none;
             padding-left: 5px;
+            -webkit-transform: rotate(180deg);
             transform: rotate(180deg);
             width: 100%;
 
@@ -316,8 +324,12 @@ p {
         padding: 0 5px;
         width: 100%;
 
-        @media (min-width: 800px) {
-            max-height: 200px;
+        .game--type3 & {
+            max-height: 500px;
+        }
+
+        @media (min-width: 900px) {
+            max-height: 500px;
         }
     }
 }
@@ -326,7 +338,7 @@ p {
     @include flexbox
 
     &__options {
-        width: 50%;
+        width: 55%;
 
         &::before {
             content: 'R. ';
@@ -337,13 +349,29 @@ p {
         }
     }
 
+    &__option {
+        display: inline-block;
+        min-width: 50px;
+
+        &--player1 {
+            text-align: right;
+        }
+    }
+
     &__result {
-        width: 60%;
+        width: 45%;
+
+        &::first-letter {
+            text-transform: uppercase;
+        }
     }
 }
 
 // player controls
 .player1 {
+    @media (min-width: 900px) {
+        margin-bottom: 1em;
+    }
     .game--type3 & {
         display: none;
     }
@@ -372,7 +400,7 @@ p {
         display: none;
         font-size: 20px;
         left: 0;
-        padding-top: 27%;
+        padding-top: 20%;
         position: absolute;
         right: 0;
         text-align: center;
@@ -429,8 +457,7 @@ p {
 
 // options
 .options {
-    @include flexbox
-    margin-bottom: 1em;
+    @include flexbox;
 
     &--chosen {
         position: relative;
@@ -475,7 +502,7 @@ p {
     }
 
     &:hover,
-    &:active {
+    &:focus {
         &::before {
             background-color: $orange;
         }
@@ -487,9 +514,9 @@ p {
         &::before {
             height: 70px;
             width: 70px;
-            @media (min-width: 650px) {
-                height: 100px;
-                width: 100px;
+            @media (min-width: 950px) {
+                height: 88px;
+                width: 88px;
             }
         }
     }
@@ -527,6 +554,14 @@ p {
 
 .option-input {
     @include hidden;
+
+    &:focus {
+        & + label {
+            &::before {
+                background-color: $orange;
+            }
+        }
+    }
 }
 
 // expanded rules
