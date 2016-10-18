@@ -7,8 +7,10 @@ $button: #98937e;
 $white: #f9f7f7;
 $green: #005734;
 $yellow: #ff0;
+$red: #f00;
 $black: #000;
 $orange: #ff9800;
+$brightgreen: #36fb09;
 
 // mixins
 @mixin hidden {
@@ -29,9 +31,10 @@ $orange: #ff9800;
     }
 }
 
-html, body {
-    margin: 0;
+html,
+body {
     height: 100%;
+    margin: 0;
 }
 
 body {
@@ -49,39 +52,43 @@ p {
 }
 
 .game {
-    max-width: 500px;
-    margin: 0 auto;
-    position: relative;
     height: 100%;
+    margin: 0 auto;
+    max-width: 500px;
+    position: relative;
+
+    @media (min-width: 800px) {
+        max-width: 800px;
+    }
 
     // Game buttons
     &__button {
         background: $button;
         border: solid 2px $green;
         border-radius: 5px;
-        margin: 0 0 1em;
         color: $white;
-        padding: 10px 15px;
         font-size: 1.1em;
+        margin: 0 0 1em;
+        padding: 10px 15px;
 
         &--1 {
             .game--type1 & {
-                opacity: 0.3;
                 cursor: default;
+                opacity: .3;
             }
         }
 
         &--2 {
             .game--type2 & {
-                opacity: 0.3;
                 cursor: default;
+                opacity: .3;
             }
         }
 
         &--3 {
             .game--type3 & {
-                opacity: 0.3;
                 cursor: default;
+                opacity: .3;
             }
         }
     }
@@ -102,7 +109,7 @@ p {
 
     &__change {
         background: none;
-        border: none;
+        border: 0;
         font-size: 30px;
         position: absolute;
         right: 5px;
@@ -118,13 +125,16 @@ p {
         }
 
         .game--type1 & {
-            top: 180px;
+            @media (max-width: 800px) {
+                top: 180px;
+            }
         }
 
         &--open {
             &::after {
                 content: '\2716';
             }
+
             .game--type1 & {
                 top: 5px;
             }
@@ -154,8 +164,8 @@ p {
     }
 
     &__settings-content {
-        width: 100%;
         text-align: center;
+        width: 100%;
     }
 
     &__type,
@@ -167,17 +177,18 @@ p {
         }
     }
 
-    // 2 player mobile setting: 
+    // 2 player mobile styles
     &__arena {
         height: 100%;
+        min-height: 450px;
 
         @media (max-width: 800px) {
 
             .player1 {
+                bottom: 0;
                 left: 0;
                 position: absolute;
                 right: 0;
-                bottom: 0;
 
                 .options {
                     margin-bottom: 0;
@@ -186,8 +197,19 @@ p {
 
             .game__extend,
             .game__restart {
+                bottom: 125px;
                 font-size: 13px;
                 padding: 3px 5px;
+                position: absolute;
+                right: 110px;
+
+                .game--lizard-spock & {
+                    bottom: 90px;
+                }
+            }
+
+            .game__restart {
+                right: 10px;
             }
 
             .game--type1 & {
@@ -202,7 +224,7 @@ p {
                     display: none;
                 }
 
-                .status__score {
+                .status__score--mirror {
                     display: block;
                 }
 
@@ -227,42 +249,69 @@ p {
     display: flex;
     flex-wrap: wrap;
     padding: 2em 0 1em;
-    position: relative;
+    // position: relative;
 
     &__round {
         padding-left: 5px;
         width: 50%;
+
+        @media (max-width: 800px) {
+            bottom: 180px;
+            position: absolute;
+        }
     }
 
     &__winner {
         padding-right: 5px;
         width: 50%;
+
+        @media (max-width: 800px) {
+            bottom: 150px;
+            position: absolute;
+        }
     }
 
     &__score {
         font-family: monospace;
-        font-size: 20px;
+        font-size: 50px;
         margin-bottom: 1em;
         text-align: center;
         width: 100%;
 
-        &--player2 {
-            display: none;
-            content: attr(data-score);
-            left: 0px;
-            padding-left: 5px;
+        .game--type1 & {
+            left: 0;
             position: absolute;
             right: 0;
-            top: 8px;
+            top: 47%;
+
+            @media (min-width: 800px) {
+                position: relative;
+            }
+        }
+
+        &--mirror {
+            content: attr(data-score);
+            display: none;
+            padding-left: 5px;
             transform: rotate(180deg);
             width: 100%;
+
+            .game--type1 & {
+                top: 37%;
+            }
         }
     }
 
     &__moves {
         list-style: none;
+        max-height: 40px;
+        overflow: auto;
         padding-left: 0;
         width: 100%;
+
+        @media (min-width: 800px) {
+            max-height: 200px;
+        }
     }
 }
 
@@ -304,6 +353,11 @@ p {
 .player2 {
     position: relative;
 
+    @media (min-width: 800px) {
+        display: inline-block;
+        width: 48%;
+    }
+
     &::after {
         bottom: 0;
         color: $white;
@@ -318,16 +372,50 @@ p {
         text-shadow: 1px 1px 1px $black;
         text-transform: uppercase;
         top: 0;
+
+        .game--lizard-spock & {
+            padding-top: 15%;
+        }
     }
 
     .game--won & {
 
         .options {
-            opacity: 0.3;
+            opacity: .3;
         }
 
         &::after {
             display: block;
+        }
+    }
+}
+
+.player1--wins {
+
+    .player1 {
+        &::after {
+            border-bottom: solid 5px $brightgreen;
+        }
+    }
+
+    .player2 {
+        &::after {
+            border-bottom: solid 5px $red;
+        }
+    }
+}
+
+.player2--wins {
+
+    .player1 {
+        &::after {
+            border-bottom: solid 5px $red;
+        }
+    }
+
+    .player2 {
+        &::after {
+            border-bottom: solid 5px $brightgreen;
         }
     }
 }
@@ -346,7 +434,7 @@ p {
             align-self: center;
             background: $black;
             bottom: 0;
-            color: white;
+            color: $white;
             content: 'chosen';
             display: flex;
             left: 0;
@@ -374,7 +462,7 @@ p {
         display: block;
         height: 100px;
         margin: 0 auto;
-        transition: background-color 0.3s;
+        transition: background-color .3s;
         width: 100px;
     }
 

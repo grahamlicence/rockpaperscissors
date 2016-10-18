@@ -139,7 +139,9 @@ const arena = {
         this.winner = null;
         html.extend.innerText = `Best of ${this.bestOf + 2}?`;
         html.extend.className = html.extend.className.replace(' game__extend--active', '');
-        html.game.className = html.game.className.replace(' game--won', '');
+        html.game.className = html.game.className
+            .replace(' game--won player1--wins', '')
+            .replace(' game--won player2--wins', '');
         this.updateScoreBoard();
         if (gameType === 'cvc') {
             this.startSimulation();
@@ -209,7 +211,7 @@ const arena = {
 
         if (winner) {
             result = `${winner} wins game!`;
-            html.game.className += ' game--won';
+            html.game.className += ` game--won ${winner}--wins`;
             html.extend.className += ' game__extend--active';
         } else if (moves.length) {
             result = moves[moves.length - 1].result;
@@ -334,7 +336,10 @@ const arena = {
         this.updateScoreBoard();
         this.bestOf = 3;
         this.html.extend.innerText = `Best of 5?`;
-        this.html.game.className = this.html.game.className.replace(' game--won', '');
+        this.html.extend.className = this.html.extend.className.replace(' game__extend--active', '');
+        this.html.game.className = this.html.game.className
+            .replace(' game--won player1--wins', '')
+            .replace(' game--won player2--wins', '');
 
         // restart simulation 
         if (this.gameType === 'cvc') {
@@ -389,6 +394,9 @@ const arena = {
         this.setUpGame();
 
         this.setPlayerVsComputer();
+        setTimeout(function() {
+            document.getElementsByClassName('game__type')[0].children[1].click()
+        }, 1000);
     }
 }
 
