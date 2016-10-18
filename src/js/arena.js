@@ -394,9 +394,6 @@ const arena = {
         this.setUpGame();
 
         this.setPlayerVsComputer();
-        setTimeout(function() {
-            document.getElementsByClassName('game__type')[0].children[1].click()
-        }, 1000);
     }
 }
 
