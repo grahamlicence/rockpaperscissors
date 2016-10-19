@@ -200,13 +200,13 @@ const arena = {
     updateScoreBoard() {
         this.checkForWinner(match.getScore());
 
-        const {score, moves, winner, html, gameType} = this,
+        const {score, moves, winner, lastMatch, html, gameType} = this,
             round = match.getRound();
         let result = '',
             previousMoves = '';
 
         html.status.score.innerHTML = `${score.player1}-${score.player2}`;
-        html.status.score2.innerHTML = `${score.player1}-${score.player2}`;
+        html.status.scoreMirror.innerHTML = `${score.player2}-${score.player1}`;
         html.status.round.innerHTML = `Round ${winner ? round - 1 : round}`;
 
         if (winner) {
@@ -233,6 +233,10 @@ const arena = {
             for (let i = moves.length - 1; i > -1; i--) {
                 previousMoves += templates.previousMove({option: `${i + 1} ${moves[i].move}`, result: moves[i].result});
             }
+        }
+
+        if (lastMatch === 'player1' || lastMatch === 'player2') {
+            html[lastMatch][0].parentElement.className += ' player-wins';
         }
         
         html.status.winner.innerHTML = result;
@@ -313,6 +317,9 @@ const arena = {
             player2[i].checked = false;
         }
 
+        // remove win animation
+        this.html.player1[0].parentElement.className = this.html.player1[0].parentElement.className.replace(/ player-wins/g, '');
+        this.html.player2[0].parentElement.className = this.html.player2[0].parentElement.className.replace(/ player-wins/g, '');
         this.updateScoreBoard();
     },
 
@@ -333,10 +340,12 @@ const arena = {
         this.winner = null;
         this.lastMatch = null;
         this.moves = [];
-        this.updateScoreBoard();
         this.bestOf = 3;
+        this.updateScoreBoard();
         this.html.extend.innerText = `Best of 5?`;
         this.html.extend.className = this.html.extend.className.replace(' game__extend--active', '');
+        this.html.player1[0].parentElement.className = this.html.player1[0].parentElement.className.replace(/ player-wins/g, '');
+        this.html.player2[0].parentElement.className = this.html.player2[0].parentElement.className.replace(/ player-wins/g, '');
         this.html.game.className = this.html.game.className
             .replace(' game--won player1--wins', '')
             .replace(' game--won player2--wins', '');

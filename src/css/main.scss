@@ -455,6 +455,24 @@ p {
     }
 }
 
+.player-wins {
+    .option {
+        &::before {
+            animation: pulse .5s normal;
+        }
+    }
+}
+
+@keyframes pulse {
+    0% {
+        background-color: $yellow;
+    }
+
+    100% {
+        background-color: $brightgreen;
+    }
+}
+
 // options
 .options {
     @include flexbox;
