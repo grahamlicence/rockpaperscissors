@@ -15,6 +15,8 @@ $brightgreen: #36fb09;
 
 // mixins
 @mixin hidden {
+    // sasstools/sass-lint/issues/70 coming..sometime
+    // sass-lint:disable-block no-important
     clip: rect(1px, 1px, 1px, 1px);
     height: 1px;
     overflow: hidden;
@@ -232,6 +234,7 @@ p {
                 }
 
                 .player2 {
+                    // sass-lint:disable-block no-vendor-prefixes
                     left: 0;
                     position: absolute;
                     right: 0;
@@ -253,7 +256,6 @@ p {
     @include flexbox;
     @include flex-wrap(wrap);
     padding: 2em 0 1em;
-    // position: relative;
 
     &__round {
         padding-left: 5px;
@@ -261,7 +263,6 @@ p {
 
         @media (max-width: 800px) {
             .game--type1 & {
-            // .game--type2 & {
                 bottom: 180px;
                 position: absolute;
             }
@@ -278,7 +279,6 @@ p {
 
         @media (max-width: 800px) {
             .game--type1 & {
-            // .game--type2 & {
                 bottom: 150px;
                 position: absolute;
             }
@@ -304,6 +304,7 @@ p {
         }
 
         &--mirror {
+            // sass-lint:disable-block no-vendor-prefixes
             content: attr(data-score);
             display: none;
             padding-left: 5px;
@@ -372,6 +373,7 @@ p {
     @media (min-width: 900px) {
         margin-bottom: 1em;
     }
+
     .game--type3 & {
         display: none;
     }
